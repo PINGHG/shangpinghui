@@ -48,6 +48,8 @@
                 type="info"
                 size="mini"
                 icon="el-icon-info"
+                title="查看当前spu的sku列表"
+                @click="showSkuList(row)"
               ></hint-button>
 
               <el-popconfirm
@@ -84,8 +86,42 @@
         ref="spu"
         >添加/修改SPU</SpuForm
       >
-      <SkuForm v-show="scene === 2" ref="sku">添加sku</SkuForm>
+      <SkuForm v-show="scene === 2" @changeScenes="changeScenes" ref="sku"
+        >添加sku</SkuForm
+      >
     </el-card>
+
+    <!-- sku对话框 -->
+    <el-dialog
+      :title="`${spu.spuName}的sku列表`"
+      :visible.sync="dialogTableVisible"
+      :before-close="closeDialog"
+    >
+      <el-table :data="skuList" v-loading="loading" style="width: 100%" border>
+        <el-table-column
+          property="skuName"
+          label="名称"
+          width="200"
+        ></el-table-column>
+        <el-table-column
+          property="price"
+          label="价格"
+          width="150"
+        ></el-table-column>
+        <el-table-column
+          property="weight"
+          label="重量"
+          width="150"
+        ></el-table-column>
+        <el-table-column label="默认图片" width="200">
+          <template slot-scope="{ row }">
+            <img
+              :src="row.skuDefaultImg"
+              style="width: 100px; height: 100px"
+            /> </template
+        ></el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -105,6 +141,10 @@ export default {
       records: [],
       total: 0,
       scene: 0, //0:展示列表，1：修改或添加spu，2：添加sku
+      dialogTableVisible: false,
+      spu: {},
+      skuList: [],
+      loading: true,
     };
   },
   methods: {
@@ -163,7 +203,23 @@ export default {
       this.scene = 2;
       this.$refs.sku.getData(this.category1Id, this.category2Id, row);
     },
-    // 自定义事件，取消返回展示列表
+    // 展示sku列表
+    async showSkuList(spu) {
+      this.spu = spu;
+      this.dialogTableVisible = true;
+      let result = await this.$API.spu.reqSkuList(spu.id);
+      if (result.code == 200) {
+        this.skuList = result.data;
+        this.loading = false;
+      }
+    },
+    // 关闭对话框
+    closeDialog(done) {
+      this.loading = true;
+      this.sku = "";
+      done();
+    },
+    // 自定义事件，取消返回展示列表 spu
     changeScene({ scene, flag }) {
       //flag：区分修改、保存
       this.scene = scene;
@@ -172,6 +228,10 @@ export default {
       } else {
         this.getSpuList();
       }
+    },
+    // 点击取消返回，添加sku
+    changeScenes(scene) {
+      this.scene = scene;
     },
   },
 };

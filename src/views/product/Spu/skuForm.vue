@@ -64,25 +64,37 @@
         </el-form>
       </el-form-item>
       <el-form-item label="图片列表">
-        <el-table style="width: 100%" border>
-          <el-table-column
-            type="selection"
-            align="center"
-            prop="prop"
-            label="label"
-          >
+        <el-table
+          :data="spuImageList"
+          @selection-change="handleSelectionChange"
+          style="width: 100%"
+          border
+        >
+          <el-table-column type="selection" align="center" prop="prop">
           </el-table-column>
           <el-table-column prop="prop" label="图片" width="width">
+            <template slot-scope="{ row }">
+              <img :src="row.imgUrl" style="width: 100px; height: 100px" />
+            </template>
           </el-table-column>
-          <el-table-column prop="prop" label="名称" width="width">
+          <el-table-column prop="imgName" label="名称" width="width">
           </el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
+            <template slot-scope="{ row }">
+              <el-button
+                type="primary"
+                v-if="row.isDefault == 0"
+                @click="changeDefault(row)"
+                >设置默认</el-button
+              >
+              <el-button v-else>默认</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">保存</el-button>
-        <el-button type="primary">取消</el-button>
+        <el-button type="primary" @click="save">保存</el-button>
+        <el-button type="primary" @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -118,6 +130,8 @@ export default {
         skuSaleAttrValueList: [],
       },
       spu: {},
+      // 收集图片数据字段
+      imageList: [],
     };
   },
   methods: {
@@ -128,23 +142,100 @@ export default {
       this.skuInfo.spuId = spu.id;
       this.spu = spu;
       // 获取图片
-      let result = await this.$API.sku.reqSpuImageList(spu.id);
+      let result = await this.$API.spu.reqSpuImageList(spu.id);
       if (result.code == 200) {
-        this.spuImageList = result.data;
+        let list = result.data;
+        list.forEach((element) => {
+          element.isDefault = 0;
+        });
+        this.spuImageList = list;
       }
       // 获取销售属性
-      let result1 = await this.$API.sku.reqSpuSaleAttr(spu.id);
+      let result1 = await this.$API.spu.reqSpuSaleAttr(spu.id);
       if (result1.code == 200) {
         this.spuSaleAttrList = result1.data;
       }
       // 获取平台属性数组
-      let result2 = await this.$API.sku.reqAttrInfoList(
+      let result2 = await this.$API.spu.reqAttrInfoList(
         category1Id,
         category2Id,
         spu.category3Id
       );
       if (result2.code == 200) {
         this.attrInfoList = result2.data;
+      }
+    },
+    // table复选框按钮的事件
+    handleSelectionChange(params) {
+      // 获取选中的图片信息数据，isDefault字段 在getData中手动添加
+      this.imageList = params;
+      // console.log(params);
+    },
+    //改变默认图片
+    changeDefault(row) {
+      this.spuImageList.forEach((item) => {
+        item.isDefault = 0;
+      });
+      row.isDefault = 1;
+      this.skuInfo.skuDefaultImg = row.imgUrl;
+    },
+    // 取消
+    cancel() {
+      this.$emit("changeScenes", 0);
+      Object.assign(this._data, this.$options.data());
+    },
+    // 保存
+    async save() {
+      // 整理平台属性
+      const { attrInfoList, skuInfo } = this;
+      // 方式一：
+      // let arr=[];
+      // attrInfoList.forEach(item=>{
+      //   if(item.attrIdAndValueId){
+      //     const [attrId,valueId] = item.attrIdAndValueId.split(':');
+      //     let obj = {attrId,valueId};
+      //     arr.push(obj);
+      //   }
+      // });
+      // skuInfo.skuAttrValueList = arr;
+      // 方式二
+      skuInfo.skuAttrValueList = attrInfoList.reduce((prev, item) => {
+        if (item.attrIdAndValueId) {
+          const [attrId, valueId] = item.attrIdAndValueId.split(":");
+          prev.push({ attrId, valueId });
+        }
+        return prev;
+      }, []);
+
+      // 整理销售属性
+      const { spuSaleAttrList } = this;
+      skuInfo.skuSaleAttrValueList = spuSaleAttrList.reduce((prev, item) => {
+        if (item.saleAttrIdAndValueId) {
+          const [saleAttrId, saleAttrValueId] =
+            item.saleAttrIdAndValueId.split(":");
+          prev.push({ saleAttrId, saleAttrValueId });
+        }
+        return prev;
+      }, []);
+
+      // 整理图片列表
+      skuInfo.spuImageList = imageList.map((item) => {
+        return {
+          imgName: item.imgName,
+          imgUrl: item.imgUrl,
+          isDefault: item.isDefault,
+          spuImgId: item.id,
+        };
+      });
+
+      // 发请求
+      let result = await this.$API.spu.reqAddSku(skuInfo);
+      if (resutl.code == 200) {
+        this.$message({
+          type: "success",
+          message: "添加sku成功",
+        });
+        this.$emit("changeScenes", 0);
       }
     },
   },

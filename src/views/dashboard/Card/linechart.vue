@@ -27,7 +27,7 @@ export default {
           smooth: true,
           // 线条样式
           lineStyle: {
-            color: "purple",
+            color: "pink",
           },
           // 区域填充样式
           areaStyle: {
@@ -40,7 +40,7 @@ export default {
               colorStops: [
                 {
                   offset: 0,
-                  color: "purple",
+                  color: "pink",
                 },
                 {
                   offset: 1,

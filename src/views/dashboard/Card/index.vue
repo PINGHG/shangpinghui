@@ -157,6 +157,9 @@
       </el-col>
       <el-col :span="6">
         <Detail title="支付笔数" count="88460">
+          <template slot="charts">
+            <barCharts></barCharts>
+          </template>
           <template slot="footer">
             <span>转换率&nbsp;64%</span>
           </template>
@@ -164,6 +167,9 @@
       </el-col>
       <el-col :span="6">
         <Detail title="运营活动效果" count="78%">
+          <template slot="charts">
+            <progressCharts></progressCharts>
+          </template>
           <template slot="footer">
             <span
               >周同比&nbsp;&nbsp;56.67%&nbsp;<svg
@@ -310,9 +316,11 @@
 <script>
 import Detail from "./detail.vue";
 import lineCharts from "./linechart.vue";
+import barCharts from "./barcharts.vue";
+import progressCharts from "./progressCharts.vue";
 export default {
   name: "Card",
-  components: { Detail, lineCharts },
+  components: { Detail, lineCharts, barCharts, progressCharts },
 };
 </script>
 

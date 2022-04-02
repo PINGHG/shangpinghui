@@ -19,6 +19,7 @@ export default {
       series: [
         {
           type: "bar",
+          color: "skyblue",
           data: [10, 7, 18, 22, 22, 33, 13, 7, 15, 33, 12],
         },
       ],

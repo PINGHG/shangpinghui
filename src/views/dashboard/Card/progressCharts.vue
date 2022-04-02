@@ -23,7 +23,7 @@ export default {
         {
           type: "bar",
           data: [78],
-          color: "green",
+          color: "yellowgreen",
           //   背景颜色
           showBackground: true,
           backgroundStyle: {

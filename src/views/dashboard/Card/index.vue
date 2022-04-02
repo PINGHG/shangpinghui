@@ -4,16 +4,18 @@
       <el-col :span="6">
         <Detail title="总销售额" count="￥126560">
           <template slot="charts">
+            <br />
             <span
-              >周同比&nbsp;&nbsp;56.67%&nbsp;<svg
+              >周同比&nbsp;56.67%
+              <svg
                 t="1648642580481"
                 class="icon"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 p-id="3145"
-                width="16"
-                height="16"
+                width="15"
+                height="15"
               >
                 <path
                   d="M786.295467 485.000533l-6.126934 2.082134v-18.295467h6.024534l0.1024 16.213333zM221.5424 485.239467h-8.9088l-0.085333-16.247467 8.994133-0.512v16.759467z"
@@ -68,15 +70,15 @@
             ></span>
             &nbsp;&nbsp;
             <span
-              >日同比&nbsp;&nbsp;19.96%&nbsp;<svg
+              >日同比&nbsp;19.96%<svg
                 t="1648642653515"
                 class="icon"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 p-id="4065"
-                width="16"
-                height="16"
+                width="15"
+                height="15"
               >
                 <path
                   d="M252.484267 566.749867h11.776v16.6912h-11.776zM815.684267 566.8352h10.461866v16.9984h-10.461866z"
@@ -172,15 +174,15 @@
           </template>
           <template slot="footer">
             <span
-              >周同比&nbsp;&nbsp;56.67%&nbsp;<svg
+              >周同比&nbsp;56.67%<svg
                 t="1648642580481"
                 class="icon"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 p-id="3145"
-                width="16"
-                height="16"
+                width="15"
+                height="15"
               >
                 <path
                   d="M786.295467 485.000533l-6.126934 2.082134v-18.295467h6.024534l0.1024 16.213333zM221.5424 485.239467h-8.9088l-0.085333-16.247467 8.994133-0.512v16.759467z"
@@ -235,15 +237,15 @@
             ></span>
             &nbsp;&nbsp;
             <span
-              >日同比&nbsp;&nbsp;19.96%&nbsp;<svg
+              >日同比&nbsp;19.96%<svg
                 t="1648642653515"
                 class="icon"
                 viewBox="0 0 1024 1024"
                 version="1.1"
                 xmlns="http://www.w3.org/2000/svg"
                 p-id="4065"
-                width="16"
-                height="16"
+                width="15"
+                height="15"
               >
                 <path
                   d="M252.484267 566.749867h11.776v16.6912h-11.776zM815.684267 566.8352h10.461866v16.9984h-10.461866z"

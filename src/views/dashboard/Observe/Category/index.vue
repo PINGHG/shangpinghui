@@ -29,13 +29,19 @@ export default {
   mounted() {
     let piechart = echarts.init(this.$refs.charts);
     piechart.setOption({
+      title: {
+        text: "搜索引擎",
+        subtext: "1048",
+        left: "center",
+        top: "center",
+      },
       tooltip: {
         trigger: "item",
       },
 
       series: [
         {
-          name: "Access From",
+          // name: "Access From",
           type: "pie",
           radius: ["40%", "70%"],
           avoidLabelOverlap: false,
@@ -63,10 +69,10 @@ export default {
       ],
     });
 
-    piechart.on("mouseover", () => {
+    piechart.on("mouseover", (params) => {
       // 获取鼠标移上去时的那条数据
       const { name, value } = params.data;
-      mychart.setOption({
+      piechart.setOption({
         title: {
           text: name,
           subtext: value,

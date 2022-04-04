@@ -4,6 +4,7 @@
 
 <script>
 import * as echarts from "echarts";
+import { mapState } from "vuex";
 export default {
   name: "barCharts",
   props: ["title"],
@@ -11,6 +12,11 @@ export default {
     return {
       barCharts: null,
     };
+  },
+  computed: {
+    ...mapState({
+      listState: (state) => state.home.list,
+    }),
   },
   mounted() {
     this.barCharts = echarts.init(this.$refs.charts);
@@ -74,6 +80,18 @@ export default {
         title: {
           text: `${this.title}趋势`,
         },
+
+        series: [
+          {
+            name: "Direct",
+            type: "bar",
+            barWidth: "60%",
+            data:
+              this.title == "销售额"
+                ? this.listState.orderFullYear
+                : this.listState.userFullYear,
+          },
+        ],
       });
     },
   },

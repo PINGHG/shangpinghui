@@ -82,6 +82,7 @@
 <script>
 import barCharts from "./barCharts.vue";
 import dayjs from "dayjs";
+
 export default {
   name: "Sale",
   components: { barCharts },
